@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<script src="classlist.js"></script>
+<script>
+
+  var element = document.createElement('div');
+
+  var assertTrue = function(x){
+    if(!x){
+      throw new Error('Did not assert true');
+    }
+    console.log('pass');
+  };
+
+  element.classList.add('a', 'b');
+  assertTrue(element.classList.contains('a') && element.classList.contains('b'));
+  element.classList.toggle('a');
+  assertTrue(!element.classList.contains('a'));
+  element.classList.remove('b');
+  assertTrue(!element.classList.contains('b'));
+
+</script>
