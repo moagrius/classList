@@ -1,22 +1,87 @@
 <!DOCTYPE html>
 
-<script src="classlist.js"></script>
+<script>
+  var DEBUG_AGAINST_NATIVE = false;
+
+  var assertEquals = function(a, b){
+    if(a != b){
+      throw new Error(a + ' does not equal ' + b);
+    }
+    console.log(a + ' does equal ' + b);
+  };
+</script>
 <script>
 
   var element = document.createElement('div');
 
-  var assertTrue = function(x){
-    if(!x){
-      throw new Error('Did not assert true');
-    }
-    console.log('pass');
-  };
+  if(DEBUG_AGAINST_NATIVE){
+
+    var comparables = {};
+
+    comparables.toggleNoClassNoForceReturn = element.classList.toggle('a');
+    comparables.toggleNoClassNoForce = element.className.toString();
+
+    comparables.toggleNoClassTrueForceReturn = element.classList.toggle('b', true);
+    comparables.toggleNoClassTrueForce = element.className.toString();
+
+    comparables.toggleNoClassFalseForceReturn = element.classList.toggle('c', false);
+    comparables.toggleNoClassFalseForce = element.className.toString();
+
+    element.className += ' d';
+    comparables.toggleYesClassNoForceReturn = element.classList.toggle('d');
+    comparables.toggleYesClassNoForce = element.className.toString();
+
+    element.className += ' e';
+    comparables.toggleYesClassTrueForceReturn = element.classList.toggle('e', true);
+    comparables.toggleYesClassTrueForce = element.className.toString();
+
+    element.className += ' f';
+    comparables.toggleYesClassFalseForceReturn = element.classList.toggle('f', false);
+    comparables.toggleYesClassFalseForce = element.className.toString();
+
+    // reset
+    element.className = '';
+
+  }
+
+</script>
+<script src="classlist.js"></script>
+<script>
+
+  if(DEBUG_AGAINST_NATIVE){
+
+    assertEquals(comparables.toggleNoClassNoForceReturn, element.classList.toggle('a'));
+    assertEquals(comparables.toggleNoClassNoForce, element.className.toString());
+
+    assertEquals(comparables.toggleNoClassTrueForceReturn, element.classList.toggle('b', true));
+    assertEquals(comparables.toggleNoClassTrueForce, element.className.toString());
+
+    assertEquals(comparables.toggleNoClassFalseForceReturn, element.classList.toggle('c', false));
+    assertEquals(comparables.toggleNoClassFalseForce, element.className.toString());
+
+    element.className += ' d';
+    assertEquals(comparables.toggleYesClassNoForceReturn, element.classList.toggle('d'));
+    assertEquals(comparables.toggleYesClassNoForce, element.className.toString());
+
+    element.className += ' e';
+    assertEquals(comparables.toggleYesClassTrueForceReturn, element.classList.toggle('e', true));
+    assertEquals(comparables.toggleYesClassTrueForce, element.className.toString());
+
+    element.className += ' f';
+    assertEquals(comparables.toggleYesClassFalseForceReturn, element.classList.toggle('f', false));
+    assertEquals(comparables.toggleYesClassFalseForce, element.className.toString());
+
+    // reset
+    element.className = '';
+
+  }
 
   element.classList.add('a', 'b');
-  assertTrue(element.classList.contains('a') && element.classList.contains('b'));
+  assertEquals(element.classList.contains('a'), element.classList.contains('b'));
+  assertEquals(element.classList.length, 2);
   element.classList.toggle('a');
-  assertTrue(!element.classList.contains('a'));
+  assertEquals(element.classList.contains('a'), false);
   element.classList.remove('b');
-  assertTrue(!element.classList.contains('b'));
+  assertEquals(element.classList.contains('b'), false);
 
 </script>
